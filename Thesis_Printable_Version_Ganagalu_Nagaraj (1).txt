@@ -1,0 +1,1196 @@
+
+
+ABSTRACT
+In horticulture, the Internet of Things and monitoring systems are becoming more
+crucial in addition to a measurement equipment, an intelligent monitoring system
+that can control, process, and store the data is required to monitor the water
+requirements of plants. The PLANTSENS project is used as a model to show how
+the server infrastructure's separate modules fit together as well as the associated
+communication techniques. Individual methods were created to estimate the
+demand for water using Python modules. A time-series database stores the crop
+water stress index (CWSI) and normalized differential water index (NDWI)
+computed from the infrared pictures.
+In our master's thesis research, we see the problem of temperature prediction as a
+regression one. The maximum and minimum leaf temperatures have been predicted
+using machine learning and deep learning approaches. Four machine learning
+regression algorithms—Decision Tree (DT), Random Forest (RF), K Nearest
+Neighbor (KNN), and Support Vector Regressor (SVR)—have been used in our
+study. Now let's talk about the artificial neural network deep learning algorithm.
+These models fit well and have a good capacity for learning from accuracy since
+they show rich insights and model results. Three of the four machine learning
+models outperform the other three in terms of accuracy, with the accuracy of these
+three models being provided as KNN 86%, RF 97%, and DT 92%. The ANN model
+is also working exceptionally well, with a 95% accuracy rate. We can see from these
+models that RF is the best model based on practical findings, however RF is overfit.
+As a result, we may draw the conclusion that the ANN is in good general condition
+and is working excellently for the particular dataset, and that deep learning and
+machine learning techniques are crucial for resolving these issues
+
+
+ACKNOWLEDGEMENTS
+I would want to express my thanks to everyone who assisted me in finishing my
+master's thesis. I would like to thank my supervisors, Mr. Lukasz Rojek,
+and Mr.Dr. Michael Hartmann for their outstanding advice, patience, and for
+providing me with a pleasant environment in which to complete my master’s thesis.
+I would want to express my gratitude to the SRH Hochschule Berlin for allowing
+me to do research in my subject of interest.
+The entrance of Mr. Lukasz Rojek's office was always available whenever I ran
+into a problem or had a request related to my inquiry or invention. In any event, he
+continuously approved this article to be my own unique effort, and he kept me under
+his supervision for the sake of the bearing whenever he believed I needed it. The
+investigation could not have been completed without his active curiosity and data.
+I would want to express my gratitude to Dr. Minea Schwenk, Mr. Fabian
+Texdorf of Robert Bosch and Robert Bosch Organisation for allowing me to
+continue my master’s thesis study utilizing the Bosch IoT campus's facilities. Mr.
+Fabian Texdorf constantly mentored and supported me with all of his knowledge
+and expertise, not just in writing my thesis but also in maintaining a work-life
+balance, which made me a better person in the end. I owe him a huge heartfelt
+thanks.
+I have been away from my parents for about three years to pursue my master's
+degree. Mr. Nagaraj and Mrs. Prabha, my parents, deserve nothing but the highest
+praise. They were always understanding of my predicament, despite the fact that I
+couldn't devote much time to them. I would also want to express my gratitude to all
+of my beloved friends for their unwavering support and constant encouragement
+during my years of education. Without them, this achievement would not have been
+possible.
+
+Page | iii
+
+
+
+CONTENTS
+ABSTRACT ........................................................................................................... ii
+ACKNOWLEDGEMENTS ................................................................................. iii
+LIST OF FIGS ........................................................................................................ v
+LIST OF ABBREVIATIONS............................................................................. vii
+1. INTRODUCTION ............................................................................................. 1
+2. Research Question: ............................................................................................ 5
+3. METHODOLOGY ............................................................................................6
+4. Machine Learning .............................................................................................8
+5. Deep learning Techniques. ..............................................................................14
+6. Evaluation Metrices.........................................................................................17
+7. Implementation ................................................................................................20
+8. Results and Model Comparison. .................................................................... 30
+9. Algorithm Results Comparison for Minimum temperature model. ...........41
+10. Algorithm Results Comparison for Maximum temperature model. ........42
+11. Conclusion and Future Work: ..................................................................... 43
+12. APPENDIX I.................................................................................................. 44
+13. ALPHABETICAL LIST OF REFERENCES ............................................ 45
+14. CHRONOLOGICAL LIST OF REFERENCES .......................................46
+15. REFERENCE LIST BY BIBLIOGRAPHY TYPE ................................... 47
+16. AFFIDAVIT...................................................................................................48
+
+
+
+
+
+LIST OF FIGURES
+Figu 1: Artificial intelligence classification overview.
+Fig 2: Automated learning Techniques split overview.
+Fig 3 -Illustration of Linear Regression.
+Fig 4 – Illustration of Random Forest.
+Fig 5 – Illustration of K- Nearest Neighbor.
+Fig 6 – Illustration of Support Vector Machine.
+Fig 7: Schematic Representation of a Perceptron.
+Fig 8: Overview of the Wet Temp dataset head (First 5 row values).
+Fig 9: Output overview of the duplicate rows.
+Fig 10 - Output Overview of the Negative values.
+Fig 11 - Output overview of the Null/ Missing values.
+Fig 12: Overview of the created Outlier Detection Function in Jupyter notebook.
+Fig 13: Overview of the P_Lufttemp distribution.
+Fig 14 - Overview of the P Lufttemp column's Upper and Lower Ranges.
+Fig 15: Overview of the P_Lufttemp Gaussian distribution.
+Fig 16: Overview of the Correlation Heat Map.
+Fig 17 - Overview of the labeled column (T_wet).
+Fig 18: Overview of the Features.
+Fig 19: Overview of the train and test score- Random Forest Regressor.
+Fig 20 - Overview of the prediction error for Random Forest Regressor.
+Fig 21 - Overview of the train and test score- Support Vector Regressor.
+Fig 22 - Overview of the prediction error for Support vector Regressor.
+Fig 23: Overview of the train and test score- Decision Tree Regressor
+
+Page | v
+
+Fig 24 - Overview of the prediction error for Decision Tree Regressor.
+Fig 25 - Execution window of the train and test score KNeighbors regressor.
+Fig 26 - Execution window of the Artificial Neural Network.
+Fig 27 - Execution window of the Artificial Neural Network.
+Fig 28 - Overview of the train and test score- Random Forest Regressor.
+Fig 29 - Overview of the prediction error for Random Forest Regressor.
+Fig 30 - Overview of the train and test score- Support Vector Regressor.
+Fig 31 - Overview of the prediction error for Support vector Regressor.
+Fig 32 - Overview of the train and test score- Decision Tree Regressor.
+Fig 33 - Overview of the prediction error for Decision Tree Regressor.
+Fig 34 - Execution window of the train and test score KNeighbors regressor.
+Fig 35 - Execution window of the Artificial Neural Network.
+Fig 36: Execution window of the train and test error of ANN
+Fig 37 - A summary of the model's accuracies. (Minimum temperature model)
+Fig 38: A summary of the model's accuracies. (Maximum temperature model)
+
+
+
+
+LIST OF ABBREVIATIONS
+Acronym
+
+Explanation
+
+RF
+
+Random Forest
+
+KNN
+
+K Nearest Neighbor
+
+DT
+
+Decision Tree
+
+ANN
+
+Artificial Neural Network
+
+SVM
+
+Support Vector Machine
+
+CSV
+
+Comma Separated Value
+
+EDA
+
+Exploratory Data Analysis
+
+IQR
+
+Inter Quartile Range
+
+ML
+
+Machine Learning
+
+DL
+
+Deep Learning
+
+MSE
+
+Mean Square Error
+
+MAE
+
+Mean Absolute Error
+
+Page | vii
+
+1. INTRODUCTION
+Water is life - and when it's gone, the thirst comes.
+Germany's groundwater has suffered recently from record temperatures and low
+rainfall, even throughout the winter. According to experts, it is time to completely
+change how the nation administers its water resources. The previous three winters,
+had too little precipitation, according to Borchardt. Some dams have significantly
+lower water levels than usual. Dams protect a portion of Germany's drinking water
+supply; hence this is an issue.
+More than 70% of the drinking water in Germany comes from underground sources.
+But according to Jörg Reichenberg, head of the Federal Environment Agency's
+(UBA) Water and Soil Division, it's challenging to make a direct correlation
+between groundwater levels and soil dryness.
+Droughts, or periods with reduced water, have long been a regular feature of the
+weather all across the world. But more frequent, more severe, and longer dry spells
+have been related to climate change. Drought frequently results in crop losses or
+decreased yields, which endangers the food security of certain areas, particularly in
+more arid parts of the developing world. Drought is also becoming a bigger issue
+for hydropower, or the use of water to produce electricity.
+The agriculture industry must adjust, from adopting locally appropriate plants to
+increasing rainwater collection and utilizing more intelligent irrigation methods like
+drip irrigation, which precisely directs water to the plant's roots.
+As part of the project Strategy for the Development of a Photogrammetric
+Monitoring System for a Resource-saving and Automated Irrigation of Crops in
+Open Field and Protected Environment (PLANTSENS), my supervisor Mr. Lukasz
+Rojek has been doing the research for the past three years (starting in 2019) to
+develop a multisensory control system for automated water stress measurement
+using a combination of infrared, thermal imaging, and short-wave infrared cameras
+in the green house.
+
+Page | 1
+
+
+To provide a summary of Mr. Lukasz Rojek's project PLANTSESNS.
+How is the PLANTSENS project carried out?
+An additional water supply is necessary for the cultivation of fruits and vegetables
+in greenhouses and open fields, as well as for the growth of organic plants in arid
+regions. The water status of the crop must be continuously checked to achieve a
+precise and individually targeted irrigation matching the actual demand for water.
+A multimodal control system for automatic water status measurement is being
+developed as part of the PLANTSENS1 project employing a combination of nearinfrared, thermal imaging, and short-wave infrared cameras. A photogrammetric
+monitoring system for autonomous irrigation based on real-time processing and
+
+analysis of multispectral images and precise georeferencing will integrate the
+optical camera and positional sensors.
+
+Page | 2
+
+
+Why was the PLANTSENS project started?
+Visible light is what the human eye sees in the outside world. This little portion of
+the radiation spectrum, from roughly 400 nm (blue) to 750 nm (red), is merely a
+portion of the total spectrum. To learn more about the things being examined,
+additional optical measuring tools can be used to get data from other spectral
+regions. The water status of plants could be determined using this information. For
+plants, water is a crucial resource. Water availability has a direct impact on the
+plant's quality, health, growth, and production. Because most crop stands are
+extremely sensitive to even slight variations in water availability, their water needs
+must be continuously checked. Early detection of a water shortage reduces adverse
+impacts on physiological processes and, consequently, the plant's production.
+
+Page | 3
+
+
+What conclusions can be drawn from the PLANTSENS project's results?
+We can infer from the project's implementation that the PLANTSENS initiative is
+a cutting-edge, plant-based, camera-supported control system that is being
+developed for the automated assessment of water content and irrigation of crops in
+greenhouses and open field farming. PLANTSENS focuses on using a combination
+of near-infrared, thermal imaging, and short-wave infrared cameras to assess the
+water needs of plants. On tomato plants in a closed greenhouse, all system
+components were evaluated. A functioning laboratory model is created by
+combining individual parts, which is then iteratively optimized. Digital photographs
+of the plant population on the one-way rail system are provided by this measuring
+device.
+How does the PLANTSENS project relate to my master's thesis?
+When my supervisor, Mr. Lukasz Rojeck, gave the go-ahead for me to begin
+working on my thesis under his guidance, I was continually looking for topics and
+data in the field of artificial intelligence. Due to my interest in and familiarity with
+machine learning, my supervisor suggested a topic for me to research inside the
+PLANTSENS Project.
+In PLANTSENSE research, the global temperature, humidity level, air temperature,
+and radiation that entered the greenhouse were all considered while calculating the
+minimum and maximum temperatures of different plants. With the help of several
+sensors, the data was gathered for almost a year as part of the PLANTSENSE
+project.
+Can we forecast the maximum and minimum temperatures? was the stated problem.
+Yes, it is the answer. We can create two models using machine learning and deep
+learning methods. One model is used to forecast the minimum temperature, while
+the second model forecasts the maximum temperature. This can be accomplished
+by using historical data collected as part of the PLANTSENSE project to train the
+models. Using the maximum and minimum temperatures as dependent variables
+and the global temperature, humidity, air temperature, and solarimeter as
+independent factors
+
+Page | 4
+,
+2. RESEARCH QUESTION:
+Comparison of deep learning and machine learning methods for predicting the leaf's
+maximum and minimum temperature.
+
+Page | 5
+
+
+3. METHODOLOGY
+3.1 Artificial Intelligence
+Artificial Intelligence is the new electricity---- Andrew Ng (Computer Scientist)
+Electricity has changed how the world operated. It changed Transportation,
+Manufacturing, Husbandry, and indeed Health care sectors. For illustration,
+before the invention of electricity, humans were limited to the day tasks, because
+at night it was dark, only people who could go gas lights could do tasks. Compared
+to now, we can still do tasks at night because it's illuminated by electric lights.
+Likewise with Artificial Intelligence (AI). AI is predicted to own the same effect.
+An example we could look at is AI Recommendation Engine on YouTube. The
+suggestion videos that appear on YouTube are determined by AI algorithms, based
+on user search history, at the background the AI algorithms learns the patterns of
+the users’ viewed videos.
+For example, if user had watched few dailyy vlog videos, then on the next visit to
+his account he would be recommended with more vlog videos to watch.
+As technology is advancing, research in the field of AI is drastically growing. So,
+the previous benchmark’s that define AI is becoming outdated.
+
+Artificial Intelligence
+
+Modular Programming Techniques
+
+Automated learning Techniques
+
+Fig 1 – Artificial Intelligence split.
+
+Page | 6
+
+
+
+3.1.1 Modular Programming Techniques:
+In the Modular Programming Techniques, a programmer must be aware of the
+logic to reach to a solution.
+Example:
+2 + 3 = 5, Here 2 and 3 are the inputs from the users, result 5 is the output. But
+the operator logic used by the programmer is addition. Hence it is very much
+required for a programmer to define the logic for a programme to run.
+
+3.1.2 Automated learning Techniques:
+In the Automated Learning technique, the data engineer/ data scientist will make
+data compatible for an AI algorithm to extract logic from the data.
+In the upcoming pages we will have a deep dive into Machine Learning and Deep
+Learning Techniques.
+
+Automated learning Techniques
+
+4. Machine Learning Techniques
+
+5. Deep Learning Techniques
+
+Fig 2 – Automated learning Techniques split.
+
+Page | 7
+
+
+
+4. MACHINE LEARNING
+Machine Learning is a field when Artificial Intelligence can be applied on any data.
+Here it is applied on data collected from the green house to design a model. One of
+the
+
+explanations why Machine Learning was preferred to predict max and min
+
+temperatures was the adaptability function of Machine Learning can say that the
+analyses and data collection will be based on quantitative method. The brief of
+methodology would be using machine. The brief of methodology would be using
+machine learning techniques and involving supervised learning algorithms.
+We choose five trendy machine learning algorithms named:
+4.1 Linear Regression (LR),
+4.2 Random Forest (RF),
+4.3 Decision Tree (DT),
+4.4 K Nearest Neighbor (KNN) and,
+4.5 Support Vector Machine (SVM). We will discuss the following algorithms in
+detail below.
+
+Page | 8
+
+
+
+4.1 Linear Regression
+Linear Regression is a Supervised machine learning algorithm. Linear Regression
+helps to predict the linear relationship between two variables. The main goal of this
+algorithm is to predict the values of dependent variables based on the given inputs
+of independent variables.
+
+Fig 3 -Illustration of Linear Regression.
+4.2 Random Forest (RT)
+Random Forest is a reliable, dynamic convenient to use machine learning algorithm
+that gives good results. Hyperparameter tuning is not necessary to get best results.
+It is perhaps one among the commonly employed algorithms owning to its
+flexibility and versatility which is used for both regression and classification. The
+“Forest” that it creates is a series of decision trees, typically trained by the
+“bagging” process. The basic principle of this approach is that a mixture of models
+can maximize the total performance. In other words, several decision trees are
+developed which are combined together to render decision that are more reliable
+and efficient. Same hyperparameters are seen in Random Forest as well as in
+decision tree. Instead of using the combination of decision tree and a bagging
+classifier, a simple random forest can bechosen. Similarly, Random Forest’s
+regressor can be utilized for any regression tasks. Significant randomness is added
+to the model as the trees increase. While splitting it looks for the best feature in the
+
+Page | 9
+
+
+
+random subset which renders good results. Random thresholds can be used for each
+feature.
+
+Fig 4 – Illustration of Random Forest.
+
+4.3 Decision Tree (DT)
+Decision tree is built from tree structures, and it can be classification of regression
+models. Incremental development of an associated decision tree breaking down the
+dataset into tiny subsets and the resultants tree is formed with leaf nodes and
+decision nodes. The split is determined by Iterative dichotomise 3 (ID3) algorithms
+structure.A decision tree is implemented by entropy and information gain. (Sadgali,
+Sael, &Benabbou,2019)
+
+Page | 10
+
+
+
+4.3.1 Difference between Decision Tree and Random Forest.
+There are several variations even though the random forest is a set of decision trees.
+In decision trees if the training data is given the input with labels and features then
+a series of rules will be created that could be used for predictions. In contrast to this
+Random Forest algorithm randomly chooses observations and characteristics to
+construct multiple decision trees and the average of this outcome is taken into
+consideration
+Overfitting is another problem in decision trees, whereas Random Forest avoids
+overfitting by constructing random subsets of features and with random subsets of
+features smaller trees are created and combined. Based on number of trees built by
+the Random Forest algorithm the computational speed depends. The
+hyperparameters are often used to maximise the predictive ability or to speed up the
+algorithm in Random Forest.
+Comprehending the hyperparameters are extremely easy because there aren’t many
+hyperparameters. The major disadvantage of this algorithm is that huge number of
+trees will eventually make the algorithm too sluggish and unreliable. In fact, this
+algorithm is easy and fast to train but little slow when it comes to making
+predictions. For an efficient and accurate prediction, huge number of trees are
+needed which in turn slows down the model. Other algorithms are comparatively
+better if there is a search for analysis of relationships in the data is required
+
+Page | 11
+
+
+
+4.4 K- Nearest Neighbor (KNN)
+KNN is called lazy learning and non-parametric algorithm. It does not assume any
+data underlying in the distribution. Determination of the model structure is based
+on the dataset. Almost all worldwide datasets don’t follow mathematical theoretical
+assumptions into practice. This algorithm model generation doesn’t require any data
+points. For test phase all the training data is consumed. Due to this the testing phase
+is costlier and slower whereas training becomes faster. Memory and time
+increased cost in testing phase. KNN consumes more time in all data points
+scanning and this needs lots of storing data which utilizes lots of memory. In k
+nearest neighbor, number of nearest neighbor is K. The important decisive factor is
+number of neighbors. K is usually odd number if count of K is 2. If K=1 then it is
+
+Leaf temp
+
+said to be nearest neighbor model. (Jianrong et al., 2019)
+
+2
+
+4
+
+6
+
+8
+
+Independent variables
+Fig 5 – Illustration of K- Nearest Neighbor.
+
+Page | 12
+
+
+
+Below is a stepwise explanation of the algorithm:
+
+1. First, the distance between the new point and each training point is
+calculated.
+2. 2. The closest k data points are selected (based on the distance). In this
+example, points 1, 5, 6 will be selected if the value of k is 3.
+3.
+
+The average of these data points is the final prediction for the new point.
+
+4.5 Support Vector Machine (SVM)
+Both Classification and Regression problems uses SVM, SVM is one of the
+supervised learning algorithms. In SVM, every object is plotted as a point in ndimensional space. Support vectors are literally positioning or co-ordinates of
+specific individual findings or observations. In high dimensional spaces SVM is
+very efficient. SVM fits decently when there is a good differentiation range. SVM
+works well when the total dimensions exceed the number of list of regression
+algorithms in machine learning items. Memory efficiency can be noticed in SVM
+as it uses support vectors i.e., subset of training points is utilised in the decision
+function.When there is a huge dataset SVM cannot be used since the necessary
+training period is very high. The functioning of the SVM is poor when there is more
+noise. SVM does not include estimates of probability explicitly, instead they are
+determined using a five-fold cross validation.
+
+Fig 6 – Illustration of Support Vector Machine.
+
+Page | 13
+
+
+
+5. DEEP LEARNING TECHNIQUES.
+Deep learning plays a major role in data science. Vast amount of labelled data is
+involved in Deep learning algorithms. Deep learning algorithms helps in extraction
+of higher-level features from raw data utilizing several layers. Feature extraction
+problems can be tackled by Deep Learning. Deep learning techniques are smart
+enough to learn to look for the right features on their own with really no programmer
+guidance. Fundamentally, deep learning resembles the way our brain operates.
+Deep learning produces improved outcomes by taking immediate decisions and
+anticipates the outputs of any system based on the dataset The word deep in Deep
+Learning is motivated from the amount of processing layers the data passes through
+to achieve good accuracy. It has an essential aspect in analysis of data, predictive
+modelling, and neural networks. Deep Learning resembles the way human acquire
+certain knowledge and take decisions. Automation of predictive analytics can be
+done by Deep Learning. Standard Machine Learning techniques are linear whereas
+Deep Learning models are piled into a hierarchical structure of rising complexities.
+5.1 Artificial Neural Network.
+To understand what ANN, it is very necessary to know what a neural network is.
+Neuron is a fundamental unit of nervous system thus a network of this type is called
+neural network. In simple words, if the strength of neuron network in a brain were
+to be imbibed in an abstract group of items that can replicate the same action, then
+it can be called as Artificial Neural Network. ANN can be used to do a specific set
+of tasks like classification, clustering etc. ANN can be interpreted as weighed
+guided graphs. In ANN the nodes are generated by artificial neurons
+and the relationship between their input and outputs can be expressed by weightdirected edges. The input signal for ANN is taken from the outside world as a
+pattern or a image as a vector and is represented mathematically by x(n), where n
+is the number of inputs. The weights are nothing but the information used by ANN
+to tackle an issue. In general, it reflects the neural interconnection. The weighted
+inputs are added within the processing machine, if the total equals zero then a bias
+is applied to render the outcome as a value other than zero. The input value to the
+bias is one. A threshold is set to maintain the answer within the limits as the total
+of inputs weight can vary between zero and positive infinity. This output is then
+
+Page | 14
+
+
+
+passed through an activation function which includes a group of transfer functions
+used to get a required output.
+Artificial Neural Network comprises of a significant number of artificial neurons
+which is organised in a sequence of layers.
+The different layers present in the ANN are
+1) Input layer,
+2) Output layer and,
+3) Hidden layer.
+Input Layer:
+The actual learning on the network takes place in the input layer where the data is
+obtained from the outside world.
+Output Layer:
+This layer includes units that responds to the input data fed to the device where we
+can notice if the system has learned the task or not.
+Hidden Layer:
+This layer is concealed between the input and the output layer. The function of this
+layer is to convert the input data to some form of usable format which can be used
+by the output layer. After each iteration the ANN gets updated which helps
+maximum learning.
+Input Layer
+
+Hidden Layer
+
+Output Layer
+
+`
+
+Fig 7 - Schematic Representation of a Perceptron.
+
+Page | 15
+
+
+
+Perception is a single layer of neural network which provides a single output.
+and x(n) reflects the independent input values which is multiplied with synaptic
+weights i.e., to w(n). Weight indicates the power of the node. b is the bias value
+which is used to switch the activation function high or low. In general, the synaptic
+weights and bias are added and then fed to the activation function to produce a result
+which is given as the output.
+
+Page | 16
+
+
+
+6. EVALUATION METRICES
+There are 3 main metrics for model evaluation in regression:
+1) R Square/Adjusted R Square.
+2) Mean Square Error (MSE)/Root Mean Square Error (RMSE).
+3) Mean Absolute Error (MAE).
+6.1 R Square/Adjusted R Square:
+R Square measures what proportion variability in variable may be explained by the
+model. it's the square of the Correlation Coefficient(R) which is why it's called R
+Square.
+
+R Square is calculated by the sum of squared of prediction error divided by the
+overall sum of the square which replaces the calculated prediction with mean. R
+Square value is between 0 to 1 and an even bigger value indicates a stronger fit
+between prediction and actual value.
+R Square may be a good measure to see how well the model fits the dependent
+variables. However, it doesn't take into consideration of overfitting problem. If your
+regression model has many independent variables because the model is simply too
+complicated, it should fit alright to the training data but performs badly for testing
+data. that's why Adjusted R Square is introduced because it'll penalize additional
+
+Page | 17
+
+
+
+independent variables added to the model and adjust the metric to forestall
+overfitting issues.
+In Python, you can calculate R Square using Sklearn Package.
+
+6.2 Mean Square Error (MSE) / Root Mean Square Error (RMSE).
+While R Square is a relative measure of how well the model fits dependent
+variables, Mean Square Error is an absolute measure of the goodness for the fit.
+
+MSE is calculated by the sum of the square of prediction error which is real output
+subtracted from the expected output and then divide by the amount of data points.
+It gives you an absolute number on what quantity your predicted results deviate
+from the actual number. you cannot interpret many insights from one single result,
+but it gives you a real number to test against other model results and facilitate your
+select the foremost effective regression model.
+Root Mean Square Error (RMSE) is that the root of MSE. it's used more commonly
+than MSE because firstly sometimes MSE values are often too big to test easily.
+Secondly, MSE is calculated by the square of error, and thus root brings it back to
+the identical level of prediction error and makes it easier for interpretation.
+In Python, you can calculate R Square using Sklearn Package
+
+Page | 18
+
+
+
+6.3 Mean Absolute Error (MAE).
+Mean Absolute Error (MAE) is similar to Mean Square Error (MSE). However,
+instead of the sum of square of error in MSE, MAE is taking the sum of the absolute
+value of error.
+
+Compared to MSE or RMSE, MAE is a more direct representation of sum of error
+terms. MSE gives larger penalization to big prediction error by square it while MAE
+treats all errors the same.
+MAE can be calculated in Python using Sklearn Package.
+
+Page | 19
+
+
+
+7. IMPLEMENTATION
+The effective analysis of the data would be based on effective implementation of
+the minimum and maximum temperature system. The CSV format file is used, and
+Python Language is used for coding with Jupyter Notebook for effective analysis.
+The simplification of data and refining of the collected data will grant effective
+analysis.
+The following steps are analysed in the continuous process:
+7.1 Exploratory Data Analysis:
+In exploratory data analysis (EDA) we describe the dataset in brief and implement
+various visualizations of the data to identify the main characteristics to be focused
+on.
+Exploratory data analysis is the first step to deal with sample data that we have
+obtained. Mindset of a data scientist while performing EDA must include:
+1) To identify and deal the duplicate values.
+2) To identify and deal with the negative values.
+3) To identify and deal with the missing values.
+4) To identify and remove the outliers.
+
+7.1.1 Green House Dataset for Predicting Maximum and Minimum
+temperatures of the leaf.
+This dataset was a sample of a much larger dataset obtained from greenhouse using
+various thermal sensors.
+The dataset was made for performing research in the project named Plantsens which
+was carried out at Berliner Hochschule für Technik.
+
+Page | 20
+
+
+
+7.1.2 Models.
+As we already know that we need to estimate the leaf's maximum and minimum
+temperatures, we'll need two machine learning models. Hence from now we are
+going to see two models in every step.
+7.1.3 Model 1 – To predict Minimum Temperature of the leaf.
+The dataset explanation:
+1) Global Temperature
+2) Air Temperature
+3) Humidity Temperature
+4) Wet temperature of the leaf.
+
+7.1.4 Wet Temp Dataset head
+
+Fig 8 - Overview of the Wet Temp dataset head (First 5 row values).
+Here the shape of the dataset is 12200 * 5 columns.
+
+Page | 21
+
+
+
+7.1.5 To identify and deal the duplicate values.
+
+Fig 9 - Output overview of the duplicate rows.
+Here in the Fig 9, we see that there are 343 rows of duplicate values, hence we will
+remove the duplicate values. After removal of the duplicate values the shape of the
+dataset is 11877 * 5 columns.
+7.1.6 To identify and deal with the negative values.
+
+Fig 10 - Output Overview of the Negative values.
+
+Here in the Fig 10, We see that there are no negative values. Hence, we take no
+action.
+7.1.7 To identify and deal with the missing values.
+
+Fig 11 - Output overview of the Null/ Missing values.
+
+Page | 22
+
+
+
+Here in the Fig 11, We see that there are no missing values. Hence, we take no
+action.
+7.2 To identify and remove the outliers.
+Till now, we have seen only the output values from the jupyter notebook. But in
+this section, we are going to see visual data exploration techniques.
+Outliers are the extreme values that affect the model accuracy.
+There are two perspectives to determine the outliers, mainly:
+1) Stat Perspective
+2) Domain Perspective
+In our modelling problem, we are going to use the stat perspective.
+
+7.2.1 Stat Perspective.
+To detect outliers and remove the same we are going to use the concept of Quartiles.
+The Quartiles are divided into 4 sections,
+1) Q1 – 25% (Min)
+2) Q2 – 50% (Mean / Median / Mode)  Purely subject to Distribution of a
+dataset).
+3) Q3 – 75%
+4) Q4 – 100% (Max)
+
+How does the Interquartile range algorithm work?
+Step1Ensure the column data is sorted Ascending order.
+Step2Get the values of Q1 and Q3 using panda’s library. (Describe ())
+Step3  Calculate the Inter Quartile Range (IQR) using the following formulae:
+IQR = Q3– Q1
+Here Q1= 25%, Q3 = 75%.
+
+Page | 23
+
+
+
+Step4 Calculate the upper range using the following formulae:
+LR= Q1- (1.5* IQR)
+Step5 Calculate the Lower Range using the following formula:
+UR = Q3 + (1.5*IQR).
+After calculating the Upper Range and Lower Range for a particular column, drop
+the values beyond upper range and the values below the lower range to achieve
+Gaussian distribution for the required data. We would be achieving the above steps
+by creating a function in the python jupyter notebook.
+The created function can be seen in the following section:
+
+Fig 12 - Overview of the created Outlier Detection Function in Jupyter
+notebook.
+
+7.2.2 Applying IQR Algorithm on “P_Lufttemp” column.
+As an example, we would be applying the Inter Quartile range algorithm to one of
+the “P_Lufttemp” column to make the column Gaussian distribution/ Bell curve.
+
+To see how the “P_Lufttemp” is distributed we would be using displot function
+which is available on Seaborn library.
+
+Page | 24
+
+
+
+Right
+skewness/
+Positive
+
+Fig 13 - Overview of the P_Lufttemp distribution.
+
+The distribution of the "P Lufttemp" column data is shown in Fig.13. The column
+does not have a gaussian distribution, as can be shown. In our example, the column
+has the right skewness, which acts as outliers.
+As a result, we must use the IQR technique on the "P Lufttemp" column to reduce
+outliers, resulting in a right-skewed distribution being converted to a gaussian
+distribution.
+Using the IQR technique, we'll first determine the upper and lower ranges of "P
+Lufttemp."
+
+Fig 14 - Overview of the P Lufttemp column's Upper and Lower Ranges.
+
+Page | 25
+
+
+
+We'll eliminate values beyond the upper range and values below the lower range
+after we've defined the upper and lower ranges.
+
+Fig 15: Overview of the P_Lufttemp Gaussian distribution.
+
+After applying the IQR algorithm on P_Lufttemp column we have obtained
+gaussian distribution. Which we could see in Fig 15.
+Now we need to incorporate the same IQR algorithm to all the independent
+variables available in our dataset to eliminate all the outliers.It has been carried out
+in the jupyter notebook. Due to the space constraints, we would not be adding all
+the operations here.
+
+Page | 26
+
+
+
+7.3 Correlation Matrix with Heat Map.
+Correlation shows whether the characteristics are relevant to each other. Correlation
+can
+
+be
+
+positive or negative. Heatmap makes it easier to recognise which features should be
+selected
+to train the model. Seaborn library is used to plot the correlation heatmap.
+
+Fig 16 - Overview of the Correlation Heat Map.
+
+In the Fig 16 we could see the heatmap. There is no high correlation between any
+of the features Hence we don’t drop any of the columns. We would continue to the
+next step for splitting the dataset into Label and Features.
+
+Page | 27
+
+
+
+7.4 Label and Features.
+Before feeding our dataset to the model, we have to split the dataset into Labels and
+Features.
+7.4.1 Label.
+A label is the output of a model after it has been trained. When data scientists talk
+about labeled data, they're referring to a collection of samples that have been already
+assigned with the results. In our case the column T_wet (Minimum Temperature) is
+the label. As we need to predict based on all the other independent variables.
+
+Fig 17 - Overview of the labeled column (T_wet).
+
+Page | 28
+
+
+
+7.4.2 Features.
+The Features are the independent input variables to the model. Prediction models
+use features to make predictions. In our case Feature columns are Solarimeter,
+Feuchttemp, P_Lufttemp, Globeltemp.
+
+Fig 18 - Overview of the Features.
+
+7.5 Generalization.
+Generalization is a term used in machine learning to describe how well a trained
+model can categorize or forecast unknown data. When you train a generalized
+machine learning model, you ensure that it works for any subset of unknown data.
+When we train a model to predict minimum temp, for example. If the model is given
+a dataset which was already used for training, it may perform well. However, when
+it is examined by other input values, it may receive a poor accuracy score. This
+problem can cause due to an unknown. As a result, data diversity is a critical aspect
+in making a solid forecast. Hence in simple terms, generalization can be said that
+the predicted score (Test score) must be always greater than trained score (Train
+score) to avoid overfit of the model.
+
+Page | 29
+
+
+
+8. RESULTS AND MODEL COMPARISON.
+In this section we are going to discuss about the results of our proposed machine
+learning and neural network models. The implementations like training the models,
+generalizations of the models have already been carried out in jupyter notebook. In
+support to implementations here we are going to see some outputs which we have
+received using python programming.
+
+Page | 30
+
+
+
+8.1 Results of Minimum temperature model Prediction.
+8.1.1 Random Forest Regressor result.
+
+Fig 19 - Overview of the train and test score- Random Forest Regressor.
+The minimum temperature model is fitted with Random Forest Regressor
+algorithm. The result consists of accuracy close to 97 %. In Fig 16, the train score
+and test score for random forest regressor is 99% and 97%. Clearly the model is in
+overfit condition, as the train score is greater than the test score.
+
+Fig 20 - Overview of the prediction error for Random Forest Regressor.
+The actual targets from the dataset are compared to the predicted values generated
+by our Random Forest regressor model in a prediction error plot. This enables us to
+see how much variation the model has. By comparing this plot to the 45-degree line,
+where the forecast completely fits the model, data scientists may diagnosis
+regression models.
+
+Page | 31
+
+
+
+8.1.2 Support Vector Regressor result.
+
+Fig 21 - Overview of the train and test score- Support Vector Regressor
+
+The minimum temperature model is fitted with Support Vector Regressor
+algorithm. The result consists of accuracy close to 61.3 %. In Fig 18, the train score
+and test score for support vector regressor is 58% and 61%. Clearly the model is in
+underfit condition, as the train score is greater than the test score. Though the scores
+are very less.
+
+Fig 22 - Overview of the prediction error for Support vector
+Regressor
+In a prediction error plot, the actual targets from the dataset are compared to the
+expected values created by our Support vector regressor algorithm model. We can
+
+Page | 32
+
+
+
+examine how much variety the Support vector regressor model has this way. We
+can also observe how the best fit line compares to the 45-degree line.
+8.1.3 Decision Tree Regressor result.
+
+Fig 23 - Overview of the train and test score- Decision Tree Regressor
+
+The minimum temperature model is fitted with Decision Tree Regressor algorithm.
+The result consists of accuracy close to 93 %. In Fig 19, the train score and test
+score for Decision Tree Regressor is 99% and 93%. Clearly the model is in overfit
+condition, as the train score is greater than the test score.
+
+Fig 24 - Overview of the prediction error for Decision Tree Regressor.
+
+Page | 33
+
+
+
+In a prediction error plot, the actual targets from the dataset are compared to the
+expected values created by our Decision Tree Regressor algorithm model. We can
+examine how much variety the Decision Tree Regressor model has this way. We
+can also observe how the best fit line compares to the 45-degree line.
+
+8.1.4 K Neighbors regressor result.
+
+Fig 25 - Execution window of the train and test score KNeighbors regressor.
+
+The minimum temperature model is fitted with KNeighbors regressor algorithm.
+The result consists of accuracy close to 86 %. In Fig 19, the train score and test
+score for KNeighbors regressor is 89% and 86%. Clearly the model is in overfit
+condition, as the train score is greater than the test score.
+
+Page | 34
+
+
+
+8.1.5 Artificial Neural Network result.
+
+Fig 26 - Execution window of the Artificial Neural Network.
+After fitting our data into machine learning algorithms, we clearly can observe all
+the models are either overfit or the models are underfit.
+Hence, now we are going to observe how our deep learning model ANN perform to
+our minimum temperature data. The minimum temperature model is fitted with
+ANN. The result consists of accuracy is close to 95%. In Fig 20, the train score and
+test score for ANN is 95% and 94%. Clearly the model is in generalized condition,
+as the test score is greater than the train score.
+
+Fig 27 - Execution window of the Artificial Neural Network.
+In a prediction error plot, the trained score from the dataset is compared to the tested
+score resulted from our Artificial Neural Network model. We can examine this way
+how the train and test results for our dataset is varying.
+
+Page | 35
+
+
+
+8.1.6 Results of Maximum temperature model Prediction.
+8.1.7 Random Forest Regressor result.
+
+Fig 28 - Overview of the train and test score- Random Forest Regressor.
+The maximum temperature model is fitted with Random Forest Regressor
+algorithm. The result consists of accuracy close to 95 %. In Fig 22, the train score
+and test score for random forest regressor is 97% and 99%. Clearly the model is in
+overfit condition, as the train score is greater than the test score.
+
+Fig 29 - Overview of the prediction error for Random Forest Regressor.
+The actual targets from the dataset are compared to the predicted values generated
+by our Random Forest regressor model in a prediction error plot. This enables us to
+see how much variation the model has. By comparing this plot to the 45-degree line,
+where the forecast completely fits the model, data scientists may diagnosis
+regression models.
+
+Page | 36
+
+
+
+8.1.8 Support Vector Regressor result.
+
+Fig 30 - Overview of the train and test score- Support Vector Regressor
+The minimum temperature model is fitted with Support Vector Regressor
+algorithm. The result consists of accuracy close to 30.3 %. In Fig 24, the train score
+and test score for support vector regressor is 30% and 29%. Clearly the model is in
+underfit condition, as the train score is greater than the test score. Though the scores
+are very less.
+
+Fig 31 - Overview of the prediction error for Support vector Regressor.
+In a prediction error plot, the actual targets from the dataset are compared to the
+expected values created by our Support vector regressor algorithm model. We can
+examine how much variety the Support vector regressor model has this way. We
+can also observe how the best fit line compares to the 45-degree line.
+
+Page | 37
+
+
+
+8.1.9 Decision Tree Regressor result.
+
+Fig 32 - Overview of the train and test score- Decision Tree Regressor
+
+The minimum temperature model is fitted with Decision Tree Regressor algorithm.
+The result consists of accuracy close to 89 %. In Fig 26, the train score and test
+score for Decision Tree Regressor is 99% and 89%. Clearly the model is in overfit
+condition, as the train score is greater than the test score.
+
+Fig 33 - Overview of the prediction error for Decision Tree Regressor.
+In a prediction error plot, the actual targets from the dataset are compared to the
+expected values created by our Decision Tree Regressor algorithm model. We can
+examine how much variety the Decision Tree Regressor model has this way. We
+can also observe how the best fit line compares to the 45-degree line.
+
+Page | 38
+
+
+
+8.1.10 KNeighbors regressor result.
+
+Fig 34 - Execution window of the train and test score KNeighbors regressor
+The minimum temperature model is fitted with KNeighbors regressor algorithm.
+The result consists of accuracy close to 77 %. In Fig 19, the train score and test
+score for KNeighbors regressor is 86% and 77%. Clearly the model is in overfit
+condition, as the train score is greater than the test score.
+
+Page | 39
+
+
+
+8.1.11 Artificial Neural Network result.
+
+Fig 35 - Execution window of the Artificial Neural Network.
+After fitting our data into machine learning algorithms, we can clearly observe that
+all the models are either overfit or underfit. Hence, now we are going to observe
+how our deep learning model ANN performs on our maximum temperature data.
+The minimum temperature model is fitted with ANN. The result consists of
+accuracy is close to 95%. In Fig 20, the train score and test score for ANN is 95%
+and 94%. Clearly the model is in generalized condition, as the test score is greater
+than the train score.
+
+Fig 36: Execution window of the train and test error of ANN
+In a prediction error plot, the trained score from the dataset is compared to the tested
+score resulted from our Artificial Neural Network model. We can examine this way
+how the train and test results for our dataset is varying.
+
+Page | 40
+
+
+
+9. ALGORITHM RESULTS COMPARISON
+FOR MINIMUM TEMPERATURE
+MODEL.
+Models
+
+Accuracy (%)
+
+100
+80
+60
+
+97
+
+40
+
+92
+
+86
+
+95
+
+KNN
+
+ANN
+
+61
+
+20
+0
+RFR
+
+SVR
+
+DT
+
+Axis Title
+Models
+
+Fig 37 - A summary of the model's accuracies. (Minimum temperature
+model)
+The accuracy comparison of several algorithms we employed in the execution of
+our study is shown in the above result graphic. Excel is used to create the 3D bar
+plot. As can be seen, the proposed study uses four regression techniques and one
+deep learning model, and we have the outcomes of all five models. The first model,
+the Random Forest Regressor, has a 97 percent accuracy in the graph, but we are
+not evaluating it since it is overfit. The second model support vector regressor has
+a coefficient of 61 percent, which is not generalized since the train score is higher
+than the test score, and it underperforms. The third model is a decision tree, which
+has an 92% accuracy rate but is also an overfit model. The fourth model, k
+neighbors, has an accuracy of 86 percent but underperforms. The final model is the
+artificial neural network model, which is a deep learning model with a 95 percent
+accuracy and is a generalized model with the best accuracy of all the models.
+
+Page | 41
+
+
+
+10. ALGORITHM RESULTS
+COMPARISON FOR MAXIMUM
+TEMPERATURE MODEL.
+Models
+
+Accuracy (%)
+
+100
+80
+60
+
+97
+
+89
+
+40
+20
+
+77
+
+95
+
+30
+
+0
+RFR
+
+SVR
+
+DT
+
+KNN
+
+ANN
+
+Axis Title
+Models
+
+Fig 38: A summary of the model's accuracies. (Maximum temperature
+model)
+The accuracy comparison of several algorithms we employed in the execution of
+our study is shown in the above result graphic. Excel is used to create the 3D bar
+plot. As can be seen, the proposed study uses four regression techniques and one
+deep learning model, and we have the outcomes of all five models. The first model,
+the Random Forest Regressor, has a 97 percent accuracy in the graph, but we are
+not evaluating it since it is overfit. The second model support vector regressor has
+a coefficient of 30 percent, which is not generalized since the train score is higher
+than the test score, and it underperforms. The third model is a decision tree, which
+has an 89% accuracy rate but is also an overfit model. The fourth model, k
+neighbors, has an accuracy of 77 percent but underperforms. The final model is the
+artificial neural network model, which is a deep learning model with a 95 percent
+accuracy and is a generalized model with the best accuracy of all the models.
+
+Page | 42
+
+
+
+11. CONCLUSION AND FUTURE WORK:
+On a dataset from the PLANSENSE project, we presented a horticultural practice
+problem in this research. Supervised learning is utilized in the machine learning and
+deep learning approaches. Regression methods have been used on our model. In
+order to address this problem, we have carefully chosen to apply four well-known
+machine learning algorithms: Decision Tree (DT), Random Forest (RF), K Nearest
+Neighbor (KNN), Support Vector Machine (SVM), and a deep learning approach
+called Artificial Neural Network (ANN). Given that the dataset is actual recorded
+data, it shows that four of the five suggested models function admirably. Based on
+the outcomes of real-world applications, the Random Forest model should be the
+first option; nevertheless, the Artificial Neural Network is the most effective model
+since it performs better.
+As we compare the three more effective models, RF, DT, and ANN, they provide
+in-depth analyses and conclusions based on the legitimate data with high levels of
+accuracy. But the problem with data in the area of our study is still there. A
+comparison that uses only one dataset and a variety of methodologies is not valid.
+We intend to work with more datasets in the upcoming research. The five strategies
+we discussed in this study are pretty common, but they nevertheless performed
+reasonably well. These models won't work with the new type of data; we'll need to
+create more sophisticated techniques. We'd reserve discussion of this subject for
+later work.
+More agricultural enterprises are drawn to this issue than academic organizations.
+The primary cause of the lack of publicly available data for systematic and scientific
+comparison is the existence of confidential data. If there were more data available
+for research, there would be a greater need for in-depth studies in the area.
+
+
+
+
